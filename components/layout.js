@@ -5,12 +5,12 @@ import Link from 'next/link';
 import styles from './layout.module.css';
 import utilStyles from '../styles/utils.module.css';
 
-const name = "Alexsander Oliveira";
-export const siteTitle = "Next.js Sample Website"
+const name = 'Alexsander Oliveira';
+export const siteTitle = 'Next.js Sample Website'
 
 export default function Layout({ children, home }) {
     return (
-        <div className={styles.container}>{children}
+        <div className={styles.container}>
             <Head>
                 <link rel="icon" href="/favicon.ico" />
                 <meta
@@ -62,15 +62,13 @@ export default function Layout({ children, home }) {
                 )}
             </header>
             <main>{children}</main>
-            {
-                !home && (
-                    <div className={styles.backToHome}>
-                        <Link href="/">
-                            <a>⬅ Back to home</a>
-                        </Link>
-                    </div>
-                )
-            }
-        </div >
+            {!home && (
+                <div className={styles.backToHome}>
+                    <Link href="/">
+                        <a>← Back to home</a>
+                    </Link>
+                </div>
+            )}
+        </div>
     )
 }
