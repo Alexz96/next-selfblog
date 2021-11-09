@@ -37,7 +37,7 @@ Dito isso, posso citar os seguintes tipos de renderização:
 - Pode ser usado na forma de retornar todos os caminhos subsequentes, conforme exemplo extraído da documentação abaixo:
   - Considerando o nome de arquivo conforme segue: pages/posts/[...id].js, que assim aceitará rotas como: "/posts/a", "/posts/a/b" e assim por diante;
 ```javascript
-// Se for feito conforme citado acima, no metodo getStaticPaths
+// Se for feito conforme citado acima, no método getStaticPaths
 // a implementação seria como segue
 return [
   {
@@ -55,3 +55,18 @@ export async function getStaticProps({ params }) {
 }
 ```
 - Páginas 404 podem ser sobrescritas se criar um arquivo em "pages/404.js"
+
+### Rotas API
+
+O Next.js disponibiliza de funcionalidades que permitem chamadas à APIs de forma estática e também dinâmica (assim como as rotas de arquivos).
+
+A partir disso, de acordo com o próprio tutorial oficial, é explicitado que realizar chamadas à APIs nos métodos <i>getStaticProps</i> e <i>getStaticPaths</i> não é o ideal, pois são funções executadas apenas no lado servidor, não no lado do cliente.
+Dito isso um bom caso de uso para esta funcionalidade acoplada ao Next.js, seria a e efetuar validações em um formulário e então salvar os dados diretamente em banco de dados.
+Por fim, conclui-se que o uso de APIs no Next.js é justificado para se:
+- Salvar dados diretamente no banco de dados;
+- Comunicar com APIs externas de forma segura;
+- Utilizar-se do Preview Mode (explicado abaixo);
+
+### Preview Mode
+De forma muito simplista e intuitiva, compreendi que o Preview Mode existe para que se possa realizar alterações de código e que se possa testá-lo em produção com base em cada "requisição", pois uma vez que o <i>build</i> é gerado só gerando um novo <i>build</i> para se visualizar a alteração.
+
