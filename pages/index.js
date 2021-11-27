@@ -35,10 +35,15 @@ export default function Home({ allPostsData }) {
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>Olá, me chamo Alexsander! E sou um desenvolvedor de aplicações ávido por UX.</p>
         <p>
-          (This is a sample website - you’ll be building a site like this on{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
+          Olá! Me chamo Alexsander. Eu sou um desenvolvedor de aplitivos que busca desenvolver uma UX especial.<br />
+          Atualmente trabalho na Sygecom como desenvolvedor Web Júnior e estou envolvido em tecnologias como:
+          <ul>
+            <li>Vue.js</li>
+            <li>ReactJS</li>
+          </ul>
+          No entanto meu foco não é somente em Web, pois gosto bastante de desenvolvimento Mobile, principalmente se tratando em Flutter e Android Nativo (Java e Kotlin).<br />
+          Bom, sem mais delongas este é um site que desenvolvi com o Next.js junto ao React para aprender mais e aplicar o que aprendo no tutorial Oficial. Sinta-se à vontade para ler os breves posts (em inglês).
         </p>
       </section>
 
