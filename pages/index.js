@@ -13,7 +13,7 @@ export async function getStaticProps() {
       allPostsData
     }
   }
-};
+}
 
 // Funcao que executa processo para Server Side Rendering
 // Obs: nao utilizado nesta aplicacao
@@ -36,7 +36,7 @@ export default function Home({ allPostsData }) {
       </Head>
       <section className={utilStyles.headingMd}>
         <p>
-          Olá! Me chamo Alexsander. Eu sou um desenvolvedor de aplitivos que busca desenvolver uma UX especial.<br />
+          Olá! Me chamo Alexsander. Eu sou um desenvolvedor de aplicativos que busca desenvolver uma UX especial.<br />
           Atualmente trabalho na Sygecom como desenvolvedor Web Júnior e estou envolvido em tecnologias como:
           <ul>
             <li>Vue.js</li>
