@@ -70,7 +70,7 @@ Por fim, conclui-se que o uso de APIs no Next.js é justificado para se:
 ### Preview Mode
 De forma muito simplista e intuitiva, compreendi que o Preview Mode existe para que se possa realizar alterações de código e que se possa testá-lo em produção com base em cada "requisição", pois uma vez que o <i>build</i> é gerado só gerando um novo <i>build</i> para se visualizar a alteração.
 
-### Search Engine Optimization
+### Search Engine Optimization (SEO)
 
 É sabido que técnicas de Search Engine Optimization (SEO ou ainda, Otimização para Motor de Busca) são eficazes, mas por vezes, não se sabem quais os reais motivos por isto. Sendo assim, estão entre eles os seguintes:
 
@@ -105,7 +105,23 @@ O Google usa principalmente o Googlebot Desktop e o Googlebot Smartphone como <i
 
 - 200: Mais desejado para as páginas, padrão do NextJS é retornar ele quando renderiza a página com sucesso.
 - 301/308: Indica redirecionamento e o NextJS por padrão usa o 308 (que não permite a mudança de método HTTP - GET/POST), assim "ensina" o robô que deve seguir outra URL.
-- 302: Normalmente deveria ser usado o 301, mas em caso de páginas de promoção por exemplo, pode-se usar o 302 indicando que é uma mudança/redirecionamento temporária(o).
+- 302: Normalmente deveria ser usado o 301, mas em caso de páginas de promoção por exemplo, pode-se usar o 302 indicando que é uma mudança/redirecionamento temporária(o). Exemplo: 
+```js
+export default function About() {
+    return (
+        <h1>Página exemplo de redirecionamento SEO</h1>
+    )
+}
+
+export async function getStaticProps(context) {
+    return {
+        redirect: {
+            destination: '/',
+            permanent: true //triggers 308
+        }
+    }
+}
+```
 - 404: Retorno esperado quando a página não existe e não é necessariamente algo muito ruim, a menos que seja muito recorrente, pois caso seja pode tornar a classificação no SEO muito falha ou confusa. (Pode ter uma página customizável, em /pages com o nome 404.js )
 - 410: Não muito usado, mas indica que um conteúdo foi removido e provavelmente não retornará. Bom exemplo é indicar um produto fora de estoque ou por exemplo, post removido do blog.
 - 500: Indica um erro inexperado na aplicação e também pode ter pagína customizada (Dentro do diretório /pages com nome 500.js).
