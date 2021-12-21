@@ -1,0 +1,7 @@
+# Bloqeuia todos os crawlers para rotas /accounts
+User-agent: *
+Disallow: /accounts
+
+# Permite à todos os crawlers na rota raiz
+User-agent: *
+Allow: /

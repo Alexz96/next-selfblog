@@ -70,3 +70,137 @@ Por fim, conclui-se que o uso de APIs no Next.js é justificado para se:
 ### Preview Mode
 De forma muito simplista e intuitiva, compreendi que o Preview Mode existe para que se possa realizar alterações de código e que se possa testá-lo em produção com base em cada "requisição", pois uma vez que o <i>build</i> é gerado só gerando um novo <i>build</i> para se visualizar a alteração.
 
+### Search Engine Optimization (SEO)
+
+É sabido que técnicas de Search Engine Optimization (SEO ou ainda, Otimização para Motor de Busca) são eficazes, mas por vezes, não se sabem quais os reais motivos por isto. Sendo assim, estão entre eles os seguintes:
+
+- Qualitativo
+  - Amplia a chance de um visitor se tornar cliente
+- Confiabilidade
+  - Aumenta a confiança na marca e missão/produto
+- Baixo custo
+  - A aplicação de técnicas de otimização não possuem custos diretos, sem considerar tempo e esforço despendidos
+
+<b> 3 Pilares da otimização </b>
+<details>Pilares básicos para a otimização de sites</details>
+
+- Técnico: Otimização para captura e de desempenho;
+- Criação: A criação de conteúdo visando palavras-chave com boa estratégia;
+- Popularidade: Aumento da popularidade do site com o uso de <i>backlinks</i> apresentados em sites de terceiros;
+
+<b>Responsabilidades dos sistema de busca</b>
+
+- Captura: Processo de busca em toda a internet e verificação de conteúdo.
+- Indexação: Processo de guardar os dados encontrados na etapa de captura, para serem facilmente acessados.
+- Renderização: Processo de executar qualquer recursos que o site possua visando realçar as ferramentas e conteúdo do mesmo. O processo não necessariamente é executado em todas páginas e pode ser realizado antes da indexação.
+- Classificação: Processo em que consultas são realizadas no site e para criação de resultados relevantes de acordo com uma entrada do usuário. (Aqui que os critérios de cada ferramenta estão encaixados, ex: Google, DuckDuckGo...)
+
+Neste tutorial oficial do NextJS, foi abordado o Googlebot.
+
+Importante citar que cada ferramenta possui uma fatia do mercado, sendo demonstrada no link a seguir: <a href="https://gs.statcounter.com/search-engine-market-share">Market Shares</a>
+
+O Google usa principalmente o Googlebot Desktop e o Googlebot Smartphone como <i>Web Crawlers</i>. Também, sabe-se que executar códigos JavaScript no cliente é mais custoso para o Google portanto reduzir essa necessidade, pode melhorar a classificação do site. (NextJS já realiza isso)
+
+<b>HTTP Status codes relevantes para SEO</b>
+
+- 200: Mais desejado para as páginas, padrão do NextJS é retornar ele quando renderiza a página com sucesso.
+- 301/308: Indica redirecionamento e o NextJS por padrão usa o 308 (que não permite a mudança de método HTTP - GET/POST), assim "ensina" o robô que deve seguir outra URL.
+- 302: Normalmente deveria ser usado o 301, mas em caso de páginas de promoção por exemplo, pode-se usar o 302 indicando que é uma mudança/redirecionamento temporária(o). Exemplo: 
+```js
+export default function About() {
+    return (
+        <h1>Página exemplo de redirecionamento SEO</h1>
+    )
+}
+
+export async function getStaticProps(context) {
+    return {
+        redirect: {
+            destination: '/',
+            permanent: true //triggers 308
+        }
+    }
+}
+```
+- 404: Retorno esperado quando a página não existe e não é necessariamente algo muito ruim, a menos que seja muito recorrente, pois caso seja pode tornar a classificação no SEO muito falha ou confusa. (Pode ter uma página customizável, em /pages com o nome 404.js )
+- 410: Não muito usado, mas indica que um conteúdo foi removido e provavelmente não retornará. Bom exemplo é indicar um produto fora de estoque ou por exemplo, post removido do blog.
+- 500: Indica um erro inexperado na aplicação e também pode ter pagína customizada (Dentro do diretório /pages com nome 500.js).
+- 503: Indica que o servidor não está pronto para esta requisição. Geralmente é útil retornar quando o site está fora e provavelmente será por um tempo. Previne a perda de classificação no SEO.
+
+<b>Robots.txt</b>
+
+É um arquivo que indica quais páginas os robôs devem ou podem acessar e geralmente é posicionado no diretório raiz da aplicação para que os robôs o sigam. Neste caso, o arquivo criado estará em /public.
+
+NOTA: o diretório /public não deve ser renomeado em nenhuma hipótese.
+
+<b>XML Sitemaps</b>
+
+A forma mais fácil de se manter uma comunicação com os crawlers do Google e é nele que se fornecem informações sobre páginas, vídeos e demais dados do site e os relacionamentos entre eles. Os Crawlers leem este arquivo para capturar os dados do site de forma mais inteligente.
+O uso é altamente aconselhado e se possível que este seja dinâmico, pois o Google constantemente busca novas descobertas e este arquivo poderá fornecê-las (levando a uma melhor classificação).
+
+Gerando Sitemaps
+- Manual:
+  - Criar arquivo /public/sitemap.xml:
+  ```xml
+    <xml version="1.0" encoding="UTF-8">
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <url>
+       <loc>http://www.example.com/foo</loc>
+       <lastmod>2021-06-01</lastmod>
+     </url>
+   </urlset>
+   </xml>
+  ```
+- Dinâmico:
+  - getServerSideProps em /pages/sitemap.xml.js:
+  ```js
+    const EXTERNAL_DATA_URL = 'https://jsonplaceholder.typicode.com/posts'
+
+    function generateSiteMap(posts) {
+      return `<?xml version="1.0" encoding="UTF-8"?>
+      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <!--We manually set the two URLs we know already-->
+        <url>
+          <loc>https://jsonplaceholder.typicode.com</loc>
+        </url>
+        <url>
+          <loc>https://jsonplaceholder.typicode.com/guide</loc>
+        </url>
+        ${posts
+          .map(({ id }) => {
+            return `
+          <url>
+              <loc>${`${EXTERNAL_DATA_URL}/${id}`}</loc>
+          </url>
+        `
+          })
+          .join('')}
+      </urlset>
+    `
+    }
+
+    function SiteMap() {
+      // getServerSideProps will do the heavy lifting
+    }
+
+    export async function getServerSideProps({ res }) {
+      // We make an API call to gather the URLs for our site
+      const request = await fetch(EXTERNAL_DATA_URL)
+      const posts = await request.json()
+
+      // We generate the XML sitemap with the posts data
+      const sitemap = generateSiteMap(posts)
+
+      res.setHeader('Content-Type', 'text/xml')
+      // we send the XML to the browser
+      res.write(sitemap)
+      res.end()
+
+      return {
+        props: {}
+      }
+    }
+
+    export default SiteMap
+  ```
+
