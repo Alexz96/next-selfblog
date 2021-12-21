@@ -1,4 +1,7 @@
 module.exports = {
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     // Configura redirecionamentos permanentes
     async redirects() {
         return [
