@@ -5,6 +5,7 @@ Repositório para aplicação construída com Next.js de blog pessoal, com base 
 [![GitHub issues](https://img.shields.io/github/issues/Alexz96/next-selfblog)](https://github.com/Alexz96/next-selfblog/issues)
 [![NPM](https://img.shields.io/npm/l/react)](https://github.com/Alexz96/next-selfblog/blob/master/LICENSE)
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/Alexz96/next-selfblog)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fhello-world)
 
 # Extras
 ## Anotações importantes
@@ -203,4 +204,57 @@ Gerando Sitemaps
 
     export default SiteMap
   ```
+
+<b>Metatags para SEO</b>
+
+Além de se usar  o robots.txt no diretório /public, podemos utilizar tags internas nas páginas como por exemplo:
+
+```html
+<!-- Geral -->
+<meta name="robots" content="noindex,nofollow" />
+<!-- Especifico do Google -->
+<meta name="googlebot" content="noindex,nofollow" />
+```
+
+Uma prática interessante para páginas que podem ocorrer filtragens (que podem não ter nenhum resultado), é usar o "noindex".
+
+A melhor maneira de garantir a não indexação é na usando a tag na própria página.
+
+Tags Google
+- nositelinkssearchbox
+- notranslate
+
+<b>Exemplo</b>
+
+```jsx
+import Head from 'next/head'
+
+function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <title>Meta Tag Example</title>
+        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
+        <meta name="google" content="notranslate" key="notranslate" />
+      </Head>
+      <p>Here we show some meta tags off!</p>
+    </div>
+  )
+}
+
+export default IndexPage
+```
+
+Em casos que o Google identifica conteúdos repetidos ou duplicados, a página pode ser rebaixada na classificação e isso vale para sites externos também. Portanto aqui que está a grande sacada das <i>Canonical Tags</i>, pois a partir delas que o Google identifica quem é a original.
+
+Exemplo de tag para a página de telefones em um e-commerce:
+```html
+<link rel="canonical" href="https://example.com/products/phone" />
+```
+
+<b>Renderização e Classificação</b>
+
+Estratégias de renderização
+
+- Static Site Generation: Provável melhor estratégia para SEO, pois gera o HTML na hora do build. Os robôs usam principalmente o HTML.
 
