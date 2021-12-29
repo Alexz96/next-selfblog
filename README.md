@@ -363,3 +363,180 @@ Lighthouse:
 Realiza auditorias em uma URL específica, retornando um relatório no que precisa melhorar.
 
 OBS: AdBlockers podem ocasionar a geração de um relatório incompleto ou impreciso.
+
+Componentes de Imagem e sua otimização:
+O próprio componente Image do Next.js realiza otimizações no HTML, principalmente setando-se os tamamnhos da imagem.
+
+Importações dinâmicas:
+O Next.js aceita importações dinâmicas para JavaScript. Um exemplo de conversão seria:
+De ->
+```jsx
+import Fuse from 'fuse.js'
+import _ from 'lodash'
+
+const fuse = new Fuse(countries, {
+  keys: ['name'],
+  threshold: 0.3
+})
+
+<input
+  type="text"
+  placeholder="Country search..."
+  className={styles.input}
+  onChange={async (e) => {
+    const { value } = e.currentTarget;
+
+    const searchResult = fuse
+      .search(value)
+      .map((result) => result.item);
+
+    const updatedResults = searchResult.length
+      ? searchResult
+      : countries;
+    setResults(updatedResults);
+
+    // Fake analytics hit
+    console.info({
+      searchedAt: _.now(),
+    });
+  }}
+/>
+```
+
+Para ->
+
+```jsx
+// Sem os imports e a constante
+<input
+  type="text"
+  placeholder="Country search..."
+  className={styles.input}
+  onChange={async e => {
+    const { value } = e.currentTarget
+    // Dynamically load libraries
+    const Fuse = (await import('fuse.js')).default
+    const _ = (await import('lodash')).default
+
+    const fuse = new Fuse(countries, {
+      keys: ['name'],
+      threshold: 0.3
+    })
+
+    const searchResult = fuse.search(value).map(result => result.item)
+
+    const updatedResults = searchResult.length ? searchResult : countries
+    setResults(updatedResults)
+
+    // Fake analytics hit
+    console.info({
+      searchedAt: _.now()
+    })
+  }}
+/>
+```
+OBS: Essa prática resolve o problema "Remove unused JavaScript" no load da página e melhora o TTI (Time To Interactive) que por sua vez melhor o FID.
+
+Importações dinâmicas de componentes:
+Serve para realizar um delay de componentes desnecessários no loadda página.
+
+```jsx
+// Incluir importação
+import dynamic from 'next/dynamic'
+```
+
+De ->
+```jsx
+import CodeSampleModal from '../components/CodeSampleModal'
+
+<CodeSampleModal
+  isOpen={isModalOpen}
+  closeModal={() => setIsModalOpen(false)}
+/>
+
+```
+
+Para ->
+```jsx
+const CodeSampleModal = dynamic(() => import('../components/CodeSampleModal'), {
+  ssr: false
+})
+
+{
+  isModalOpen && (
+    <CodeSampleModal
+      isOpen={isModalOpen}
+      closeModal={() => setIsModalOpen(false)}
+    />
+  )
+}
+```
+
+Com tais alterações de exemplo, os Web Vitals estarão muito melhores, restando então as seguintes melhorias como sugestão:
+- Usar HTTP2: Usando algum host que permita (Vercel por exemplo)
+- Elementos de Imagem que não tem tamanhos definidos: Bug do Lighthouse
+
+Otimizações de Fontes:
+Fontes customizadas são importantes para o Branding, Design e consistência do site, no entanto usar fontes customizadas não deveriam pesar no desempenho. (Mas normalmente pesam)
+
+Importante citar que o Next.js tem otimização automática de fontes e essa otimização ocorre em tempo de build, influenciando FCP (First Contentful Paint) e LCP (Largest Contentful Paint).
+
+Otimização de Scripts de terceiros:
+Next.js tem um componente que realiza estas otimizações, sendo chamado de Script component.
+Vale salientar que o uso padrão de scripts deve ser feito no Head, mas com este componente, pode ser usado em qualquer local. Segue exemplo:
+
+```jsx
+// De
+import Head from 'next/head'
+
+function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <script src="https://www.googletagmanager.com/gtag/js?id=123" />
+      </Head>
+    </div>
+  )
+}
+
+// Para
+import Script from 'next/script'
+
+function IndexPage() {
+  return (
+    <div>
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=123"
+      />
+    </div>
+  )
+}
+```
+
+OBS: Há duas estratégias para este load, sendo: strategy="afterInteractive" e strategy="lazyOnload". Respectivamente ocorrem quando, a página fica interativa e durante o tempo de "bobeira" do browser.
+
+<b>Monitoração de Web Vitals</b>
+
+Um componente chave para melhorar durante as iterações, é manter registros através do tempo e em produção.
+
+Ferramentas:
+- Next.js Analytics: Mede as páginas usando as Web Vitals. E fazendo deploy no Vercel, automaticamente podemos coletar os dados.
+- Custom Reporting: O Next.js disponibiliza função de <i>reportWebVitals</i>, que pode ser implementada. Um exemplo seria:
+```jsx
+// dentro de _app.js
+export function reportWebVitals(metric) {
+  console.log(metric)
+}
+```
+
+Após isso, realizar build do App e start do App. E então abrir as DevTools -> Console que serão printadas as métricas.
+
+OBS: FID só será mostrada quando houver interação na página
+
+- Google Data Studio e Datasets: Ferramenta Open-Source para análises das métricas de usuários reais. Único porém de se usar isso, é que o site precisa ter muitos acessos, caso contrário a falta de dados de acessos, fará com que não funcione.
+Geralmente os datasets são atualizados com delay de 15 dias após encerramento de mês.
+- <a href="https://pagespeed.web.dev/?utm_source=psi&utm_medium=redirect">PageSpeed Insights</a>
+
+OBS: Para Lighthouse e Chrome DevTools, Total Blocking Time terá de ser usado ao invés de First Input Delay.
+
+
