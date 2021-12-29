@@ -256,5 +256,110 @@ Exemplo de tag para a página de telefones em um e-commerce:
 
 Estratégias de renderização
 
-- Static Site Generation: Provável melhor estratégia para SEO, pois gera o HTML na hora do build. Os robôs usam principalmente o HTML.
+- Static Site Generation (SSG): Provável melhor estratégia para SEO, pois gera o HTML na hora do build. Os robôs usam principalmente o HTML.
 
+- Server-Side Rendering (SSR): Uma ótima escolha para SEO, pois assim como SSG é gerado o HTML, mas em tempo de requisição. Ótimo para casos de páginas dinâmicas.
+
+- Incremental Static Generation (ISR): Uma opção para sites com grandes quantidades de páginas. É configurado por páginas. Com isso, mantém-se os benefícios de gerações estáticas.
+
+- Client Side Rendering (CSR): Não é uma boa solução para SEO, tendo em vista que o HTML gerado é básico e só então quando o JavaScript é executado que o conteúdo é incluído. Recomendado para páginas que não devem estar classificadas em motores de buscas (ex: dashboards, página de conta de usuários).
+
+<b>AMP</b>
+
+Praticamente um requisito criado pelo Google em função dos dispositivos portáteis (smartphones) com a ideia de se carregar conteúdos mais rapidamente.
+
+<a href="https://nextjs.org/docs/advanced-features/amp-support/introduction">Suporte AMP Next.js</a>
+
+<b>Estruturas de URLs</b>
+
+É uma parte importante de SEO e independente do peso que o Google dá para esse planejamento, vale à pena usar.
+Aqui temos alguns princípios a se considerar:
+
+- Semântica: É melhor utilizar palavras ao invés de IDs e números... por exemplo 'estudo/ti/nextjs' é melhor do que 'curso-1/modulo-2'.
+
+- Padrões lógicos e consistentes: Deve-se ter um padrão consistente e lógico na estruturação, por exemplo, agrupando por pasta os produtos de um e-commerce.
+
+- Foco em palavras-chave: Deve-se utilizar palavras-chave que auxiliem no entendimento do conteúdo da página.
+
+- Não baseado em parâmetros: Nem sempre criar URLs com base em parâmetros é uma boa opção, pois às vezes não são semânticos.
+
+<b>Metatags importantes</b>
+
+- Title: Uma das mais importantes para SEO, pois o Google usa para entender o que tem no meu site. Usar palavras-chave no título melhoram a classificação.
+- Description: Uma tag importante, pois afeta o <i>click-through-rate</i> nas buscas. Considerar complementar informações do título e o uso das palavras-chave. Exemplo: 
+```html
+<meta
+  name="description"
+  content="Check out iPhone 12 XR Pro and iPhone 12 Pro Max. Visit your local store and for expert advice."
+/>
+```
+Usa-se o componente Head do Next para essas tags.
+
+- Open Graph: Não oferece muitos benefícios para SEO, mas é bom para o usuário pois mostra o conteúdo melhor e fica melhor de ser compartilhado em redes sociais. Além disso, ele aumenta a possibilidade de clique, que por sua vez aumenta as visitas ao site. Exemplo:
+
+```html
+<!-- Property é importante -->
+  <meta property="og:title" content="Social Title for Cool Page" />
+  <meta
+    property="og:description"
+    content="And a social description for our cool page"
+  />
+  <meta
+    property="og:image"
+    content="https://example.com/images/cool-page.jpg"
+  />
+```
+
+<b>SEO em cada página</b>
+
+- H1 e Headings tags: Auxilia na leitura, indicando o que está por vir de leitura após e auxilia os motores de busca a entender quais partes da página são importantes. É recomendado o uso de h1 em todas as páginas e que seja próximo do título.
+- Links internos: Sites que recebem mais links, provavelmente serão mais confiáveis aos usuários. Deve se usar o <i>href</i> para classificação da página. Este algoritmo verifica a quantidade e qualidade de links para certas páginas. Exemplo com o NextLink e Styled Components:
+```jsx
+import Link from 'next/link'
+import styled from 'styled-components'
+
+// This creates a custom component that wraps an <a> tag
+const RedLink = styled.a`
+  color: red;
+`
+
+function NavLink({ href, name }) {
+  // Must add passHref to Link
+  return (
+    <Link href={href} passHref>
+      <RedLink>{name}</RedLink>
+    </Link>
+  )
+}
+
+export default NavLink
+
+// Sem styled-components, pode se usar simplesmente Link -> <a>
+```
+
+<b>Web Vitals e Core Web Vitals</b>
+
+Basicamente são guias e métricas para se mensurar a UX do site. E as Core Web Vitals são as principais métricas para se medir tempo de <i>loading</i>, interatividade e estabilidade visual. Sendo as seguintes métricas parte da Core Web Vitals:
+
+- Largest Contentful Paint (LCP): Verifica o desempenho de loading (tempo) para carregar o maior (mais pesado) conteúdo da página.
+- First Input Delay (FID): Mede a responsividade/interatividade do site (tempo que leva uma interação do usuário). Total Blocking Time (TBT) pode ser medido pelo Lighthouse. (Maior tempo de delays de inputs prejudicam).
+- Cumulative Layout Shift (CLS): Mede a estabilidade geral do site. Site que tenha sua interface mudada inesperadamente como por exemplo, alterar o local do botão após carregar um texto, prejudica na métrica. (Considerando-se o loading do DOM)
+
+Quanto melhor o score do site nestas três métricas, melhor o desempenho geral do site. Estas métricas podem ter os valores "Good", "Needs Improvement" e "Poor".
+
+Duas formas de aplicar Core Web Vitals:
+
+<ol>
+  <li>Ter o melhor score em todas as métricas: tentar ser perfeccionista pode ser complicado para sites grandes .</li>
+  <li>Fazer um benchmark com os competidores: a competição é com os outros com as mesmas palavras-chave</li>
+</ol>
+
+<b>Consideração:</b>
+Web Vitals e Core Web Vitals visam principalmente beneficiar o usuário com base na experiência de carregamento da página, interação e afins. Além disso principalmente é uma iniciativa que busca melhorar a classificação do página e a experiência (UX) nela.
+
+<b>Melhorando os Core Web Vitals</b>
+
+Lighthouse: 
+Realiza auditorias em uma URL específica, retornando um relatório no que precisa melhorar.
+
+OBS: AdBlockers podem ocasionar a geração de um relatório incompleto ou impreciso.
