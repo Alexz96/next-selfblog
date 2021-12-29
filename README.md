@@ -539,4 +539,42 @@ Geralmente os datasets são atualizados com delay de 15 dias após encerramento 
 
 OBS: Para Lighthouse e Chrome DevTools, Total Blocking Time terá de ser usado ao invés de First Input Delay.
 
+### TypeScript
+
+Para se incluir o TypeScript em um projeto, cria-se o arquivo tsconfig.json na raiz do projeto e então se instala as dependências. Como exemplo de comandos, segue:
+
+```bash
+# Com npm
+npm install --save-dev typescript @types/react @types/node
+
+# Com Yarn
+yarn add --dev typescript @types/react @types/node
+```
+
+E como exemplo de códigos para alterações:
+
+```tsx
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+
+export const getStaticProps: GetStaticProps = async context => {
+  // ...
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  // ...
+}
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  // ...
+}
+
+// Para Rotas API
+import { NextApiRequest, NextApiResponse } from 'next'
+
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  // ...
+}
+```
+
+
 

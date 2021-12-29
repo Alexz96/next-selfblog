@@ -8,7 +8,10 @@ import utilStyles from '../styles/utils.module.css';
 const name = 'Alexsander Oliveira';
 export const siteTitle = 'My Blog with Next.js';
 
-export default function Layout({ children, home }) {
+export default function Layout({ children, home }: {
+    children: React.ReactNode
+    home?: boolean
+}) {
     return (
         <div className={styles.container}>
             <Head>

@@ -1,4 +1,6 @@
-export default function handler(req, res) {
+import { NextApiRequest, NextApiResponse } from "next";
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json({ text: 'Hello' })
     // Aqui poderia ser realizado uma operacao de salvar direto em banco
     // os dados que forem recebidos em req, com validacoes antes.

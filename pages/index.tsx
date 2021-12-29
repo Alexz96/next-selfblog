@@ -4,9 +4,10 @@ import Layout, { siteTitle } from '../components/layout';
 import utilStyles from '../styles/utils.module.css';
 import { getSortedPostsData } from '../lib/posts';
 import Date from '../components/date';
+import { GetStaticProps } from 'next'
 
 // Funcao que executa os processos para Static Generation
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData();
   return {
     props: {
@@ -28,7 +29,13 @@ export async function getStaticProps() {
   }
 */
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: {
+  allPostsData: {
+    date: string
+    title: string
+    id: string
+  }[]
+}) {
   return (
     <Layout home>
       <Head>
@@ -37,11 +44,12 @@ export default function Home({ allPostsData }) {
       <section className={utilStyles.headingMd}>
         <p>
           Olá! Me chamo Alexsander. Eu sou um desenvolvedor de aplicativos que busca desenvolver uma UX especial.<br />
-          Atualmente trabalho na Sygecom como desenvolvedor Web Júnior e estou envolvido em tecnologias como:
+          Atualmente trabalho na Sygecom como desenvolvedor Web Júnior e estou envolvido em tecnologias como:</p>
           <ul>
             <li>Vue.js</li>
             <li>ReactJS</li>
           </ul>
+          <p>
           No entanto meu foco não é somente em Web, pois gosto bastante de desenvolvimento Mobile, principalmente se tratando em Flutter e Android Nativo (Java e Kotlin).<br />
           Bom, sem mais delongas este é um site que desenvolvi com o Next.js junto ao React para aprender mais e aplicar o que aprendo no tutorial Oficial. Sinta-se à vontade para ler os breves posts (em inglês).
         </p>
