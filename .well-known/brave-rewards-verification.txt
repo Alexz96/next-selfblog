@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: next-selfblog.vercel.app
+Token: 70b53c500124dd060a653f636083e3d6d64ae630eccc197f9a51b70c7caab8e8
